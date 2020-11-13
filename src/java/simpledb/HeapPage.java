@@ -48,7 +48,7 @@ public class HeapPage implements Page {
         header = new byte[getHeaderSize()];
         for (int i=0; i<header.length; i++)
             header[i] = dis.readByte();
-
+        
         tuples = new Tuple[numSlots];
         try{
             // allocate and read the actual records of this page
@@ -65,7 +65,7 @@ public class HeapPage implements Page {
     /** Retrieve the number of tuples on this page.
         @return the number of tuples on this page
     */
-    private int getNumTuples() {
+    private int getNumTuples() {        
         // some code goes here
         return (BufferPool.getPageSize() * 8) / (td.getSize() * 8 + 1);
     }
@@ -74,13 +74,13 @@ public class HeapPage implements Page {
      * Computes the number of bytes in the header of a page in a HeapFile with each tuple occupying tupleSize bytes
      * @return the number of bytes in the header of a page in a HeapFile with each tuple occupying tupleSize bytes
      */
-    private int getHeaderSize() {
-
+    private int getHeaderSize() {        
+        
         // some code goes here
         return (getNumTuples() + 7) / 8;
-
+                 
     }
-
+    
     /** Return a view of this page before it was modified
         -- used by recovery */
     public HeapPage getBeforeImage(){
@@ -98,7 +98,7 @@ public class HeapPage implements Page {
         }
         return null;
     }
-
+    
     public void setBeforeImage() {
         synchronized(oldDataLock)
         {
@@ -195,7 +195,7 @@ public class HeapPage implements Page {
                 Field f = tuples[i].getField(j);
                 try {
                     f.serialize(dos);
-
+                
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -246,7 +246,7 @@ public class HeapPage implements Page {
         // not necessary for lab1
         assert t != null;
         RecordId recToDelete = t.getRecordId();
-        if (recToDelete != null && pid.equals(recToDelete.getPageId())) {
+        if (recToDelete != null && pid.equals(recToDelete.pageId)) {
             for (int i = 0; i < numSlots; i++) {
                 if (isSlotUsed(i) && t.getRecordId().equals(tuples[i].getRecordId())) {
                     markSlotUsed(i, false);
